@@ -1,0 +1,663 @@
+/* 1. Basic Setup & Fonts */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Prevents elements from growing wider than the screen */
+    max-width: 100%; 
+}
+
+/* Stability Fix: Prevents side-scrolling on Edge/Mobile */
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color: #fcfaf7;
+    color: #333;
+    line-height: 1.6;
+    /* Poppins for English, Kantumruy for Khmer */
+    font-family: 'Poppins', 'Kantumruy Pro', sans-serif; 
+}
+
+/* Logo Styling */
+
+.logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* THE STATUS BADGE STYLING */
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem; /* Small and clean */
+    font-weight: 600;
+    margin-top: -2px; /* Pulls it closer to the logo text */
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #999; /* Default gray while checking */
+}
+
+/* Status: OPEN (Green) */
+.status-badge.open .status-dot {
+    background-color: #2ecc71;
+    box-shadow: 0 0 8px #2ecc71;
+    animation: pulse-dot 2s infinite;
+}
+.status-badge.open .status-text {
+    color: #2ecc71;
+}
+
+/* Status: CLOSED (Red) */
+.status-badge.closed .status-dot {
+    background-color: #e74c3c;
+}
+.status-badge.closed .status-text {
+    color: #e74c3c;
+}
+
+/* Animation for the glowing effect */
+@keyframes pulse-dot {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.logo-text {
+    font-family: 'Poppins', 'Kantumruy Pro', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #6f4e37;
+    text-transform: uppercase;
+    animation: logo-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logo-glow {
+    from {
+        text-shadow: 0 0 2px rgba(111, 78, 55, 0.1);
+    }
+    to {
+        /* Creates a soft "coffee-colored" aura around the name */
+        text-shadow: 0 0 12px rgba(111, 78, 55, 0.4);
+    }
+}
+
+/* Navigation Menu Links */
+nav ul li a {
+    font-family: 'Poppins', 'Kantumruy Pro', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    color: #555;
+    /* This makes the hover look professional */
+    transition: all 0.3s ease-in-out; 
+    padding: 5px 10px;
+}
+
+/* This is the part you were missing! */
+nav ul li a:hover {
+    color: #aec41f; /* Changes to Coffee Brown on hover */
+    background-color: rgba(111, 78, 55, 0.05); /* Very subtle background highlight */
+    border-radius: 5px;
+}
+
+/*.......... DYNAMIC NEWS TICKER (VISIBLE GLOW) ..........*/
+.ticker-wrapper {
+    width: 100%;
+    background-color: #6f4e37; 
+    color: white;
+    padding: 12px 0;
+    overflow: hidden;
+    position: relative;
+    display: block;
+    
+    /* Stronger shadow that pushes 'down' onto the image below */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
+    
+    /* A bright 'light' line at the very bottom edge */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+
+    /* High Z-index ensures the shadow doesn't hide behind images */
+    z-index: 99; 
+}
+
+.ticker-content {
+    /* 'table' is the only thing that forces 100% width stability */
+    display: table; 
+    white-space: nowrap;
+    padding-left: 100%;
+    /* 20s is fast. Change to 15s if you want it racing */
+    animation: ticker-move 20s linear infinite;
+}
+
+.ticker-content span {
+    /* 'table-cell' prevents any bunching or overlapping 100% */
+    display: table-cell; 
+    white-space: nowrap;
+    padding-right: 150px; 
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+@keyframes ticker-move {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.ticker-wrapper:hover .ticker-content {
+    animation-play-state: paused;
+}
+
+/* 2. Navigation Bar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%; 
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo {
+    height: 45px;
+    width: 45px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #6f4e37;
+}
+
+.menu-action {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.btn-full-menu {
+    display: inline-block;
+    background-color: #8b8606; /* Your Olive Green */
+    color: white;
+    text-decoration: none;
+    padding: 14px 35px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-full-menu:hover {
+    background-color: #556b2f;
+    transform: translateY(-3px);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 25px;
+}
+
+/*.......... 3. HERO SLIDER SECTION ..........*/
+#home {
+    height: 70vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    padding: 0 !important;
+    margin: 0;
+}
+
+.home-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: slideShow 6s linear infinite;
+}
+
+.slide:nth-child(1) { animation-delay: 0s; }
+.slide:nth-child(2) { animation-delay: 2s; }
+.slide:nth-child(3) { animation-delay: 4s; }
+
+@keyframes slideShow {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    33% { opacity: 1; }
+    43% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.home-content {
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15%;
+}
+
+#home h1 {
+    font-size: 3rem; 
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+    #home h1 {
+        /* 'vw' makes the font size relative to the screen width */
+        font-size: 8vw; 
+        white-space: nowrap; /* Forces the text to stay in one single line */
+        letter-spacing: 0px;
+        margin-bottom: 10px;
+    }
+
+    .home-content {
+        padding: 0 5%; /* Reduces side padding to give the text more room */
+    }
+}
+
+#home p {
+    font-size: 1.2rem;
+    max-width: 800px;
+}
+
+/* 4. General Sections Styling */
+section {
+    padding: 80px 5%;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 40px;
+    color: #6f4e37;
+}
+
+/*.......... 5. DUAL VANISHING GRID SYSTEM ..........*/
+
+/* 1. The wrapper that holds both stacks side-by-side */
+.dual-stack-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* This creates the 2 columns (Coffee vs Tea) */
+    gap: 25px;
+    max-width: 900px; 
+    margin: 0 auto;
+}
+
+/* 2. The container for each individual vanishing stack */
+.card-stack-container {
+    position: relative;
+    width: 100%;
+    height: 520px; /* Reserves vertical space so content below doesn't overlap */
+}
+
+/* 3. The card style (Matches your screenshot design) */
+.sliding-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    animation: vanishNext 8s infinite;
+}
+
+/* Delay for the second card in each stack */
+.card-2 { 
+    animation-delay: 4s; 
+}
+
+@keyframes vanishNext {
+    0% { opacity: 0; visibility: hidden; transform: scale(0.98); }
+    5% { opacity: 1; visibility: visible; transform: scale(1); }
+    45% { opacity: 1; }
+    50% { opacity: 0; visibility: hidden; transform: scale(1.02); }
+    100% { opacity: 0; }
+}
+
+/* Card Image & Info Styling */
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 300px;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.price-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(83, 110, 0, 0.85);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 10px; /* This should work now */
+    font-weight: bold;
+    font-family: 'Kantumruy Pro', sans-serif;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px); /* Safari support */
+    backdrop-filter: blur(5px);
+    /* ADD THESE TWO LINES */
+    display: inline-block; 
+    z-index: 20; 
+}
+
+.item-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.item-info h3 {
+    color: #6f4e37;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.item-info p {
+    color: #777;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/*.......... STUDY SPACE GALLERY ..........*/
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.gallery-item {
+    overflow: hidden;
+    border-radius: 10px;
+    height: 220px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.08);
+}
+
+/*.......... 6. REDESIGNED LOCATION SECTION ..........*/
+#location {
+    background-color: #fcfaf7;
+    padding: 80px 5%;
+}
+
+.location-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    align-items: center;
+}
+
+/* BRAND CARD STYLING */
+.info-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+
+.brand-badge {
+    background: #6f4e37;
+    color: white;
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+.loc-detail {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.mini-flag {
+    width: 24px; /* Perfectly sized for text */
+    height: auto;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+/* TELEGRAM & PHONE TILES */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.action-card.telegram { background: #0088cc; }
+.action-card.phone { background: #6f4e37; }
+
+.action-card:hover {
+    transform: translateY(-5px);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.action-card .icon {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+}
+
+/* WORKING HOURS BAR */
+.hours-bar {
+    text-align: center;
+    background: #fff;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px dashed #6f4e37;
+    color: #6f4e37;
+    font-weight: 600;
+}
+
+/* PREMIUM MAP STYLING */
+.location-map iframe {
+    width: 100% !important;
+    height: 450px;
+    border-radius: 25px;
+    border: 8px solid white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* 7. Footer */
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    background: #333;
+    color: white;
+}
+
+/*.......... MOBILE RESPONSIVE (FIXED VERSION) ..........*/
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        padding: 30px 0;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    nav ul li {
+        margin: 15px 0;
+        margin-left: 0;
+    }
+
+    #home {
+        height: 55vh;
+    }
+
+    /* This fixes the text cutting off at the top */
+    #home h1 {
+        font-size: 1.6rem;
+        padding: 0 15px;
+        line-height: 1.4;
+    }
+
+    .dual-stack-grid {
+        grid-template-columns: 1fr; /* Keep them stacked */
+        /* Change gap to 0 or 5px to pull them together */
+        gap: 5px; 
+        padding: 0 10px;
+    }
+
+    .card-stack-container {
+        max-width: 350px;
+        margin: 0 auto;
+        /* Pulling this height down moves the second card UP */
+        /* Try 420px. If text cuts off, move it to 440px */
+        height: 420px; 
+    }
+
+    .image-wrapper {
+        height: 240px; /* Making image slightly smaller helps bring cards closer */
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Extra fix for location section */
+    .location-container {
+        display: flex; 
+        flex-direction: column;
+        text-align: center;
+    }
+
+
+    /* THIS FIXES THE LOCATION SECTION CUTTING OFF "AS" */
+    .location-container {
+        display: flex; 
+        flex-direction: column;
+        text-align: center;
+        padding: 0 20px; /* Added padding to keep text away from edges */
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .location-info {
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .location-info h3 {
+        font-size: 1.5rem;
+        word-wrap: break-word; /* Prevents long words from leaking out */
+    }
+
+    .contact-buttons {
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 10px;
+    }
+
+    .location-map iframe {
+        height: 300px;
+        width: 100% !important;
+    }
+}
+/* .......... SCROLL REVEAL ANIMATION .......... */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
